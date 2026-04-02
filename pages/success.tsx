@@ -12,8 +12,11 @@ const Success = () => {
 
   const { clearCart } = useShoppingCart();
 
+  const sessionId =
+    typeof session_id === 'string' ? session_id : undefined;
+
   const { data, error } = useSWR(
-    () => `/api/checkout_sessions/${session_id}`,
+    sessionId ? `/api/checkout_sessions/${sessionId}` : null,
     fetcher
   );
 
@@ -22,7 +25,7 @@ const Success = () => {
       shootFireworks();
       clearCart();
     }
-  }, [data]);
+  }, [data, clearCart]);
 
   return (
     <div className="container xl:max-w-screen-xl mx-auto py-12 px-6 text-center">

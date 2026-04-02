@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
+import type { GetStaticPaths, GetStaticProps } from 'next';
 import { toast } from 'react-hot-toast';
 import { useShoppingCart } from '@/hooks/use-shopping-cart';
 import Image from 'next/image';
@@ -8,14 +9,15 @@ import { formatCurrency } from '@/lib/utils';
 import { MinusSmIcon, PlusSmIcon } from '@heroicons/react/outline';
 
 import products from 'products';
+import type { Product } from 'products';
 
-const Product = props => {
+const Product = (props: Product) => {
   const router = useRouter();
   const { cartCount, addItem } = useShoppingCart();
   const [qty, setQty] = useState(1);
   const [adding, setAdding] = useState(false);
 
-  const toastId = useRef();
+  const toastId = useRef<string | undefined>(undefined);
   const firstRun = useRef(true);
 
   const handleOnAddToCart = () => {
@@ -53,7 +55,6 @@ const Product = props => {
       </Head>
       <div className="container lg:max-w-screen-lg mx-auto py-12 px-6">
         <div className="flex flex-col md:flex-row justify-between items-center space-y-8 md:space-y-0 md:space-x-12">
-          {/* Product's image */}
           <div className="relative w-72 h-72 sm:w-96 sm:h-96">
             <Image
               src={props.image}
@@ -63,7 +64,6 @@ const Product = props => {
             />
           </div>
 
-          {/* Product's details */}
           <div className="flex-1 max-w-md border border-opacity-50 rounded-md shadow-lg p-6">
             <h2 className="text-3xl font-semibold">{props.name}</h2>
             <p>
@@ -71,7 +71,6 @@ const Product = props => {
               <span className="font-semibold">In stock</span>
             </p>
 
-            {/* Price */}
             <div className="mt-8 border-t pt-4">
               <p className="text-gray-500">Price:</p>
               <p className="text-xl font-semibold">
@@ -80,7 +79,6 @@ const Product = props => {
             </div>
 
             <div className="mt-4 border-t pt-4">
-              {/* Quantity */}
               <p className="text-gray-500">Quantity:</p>
               <div className="mt-1 flex items-center space-x-3">
                 <button
@@ -99,7 +97,6 @@ const Product = props => {
                 </button>
               </div>
 
-              {/* Add to cart button */}
               <button
                 type="button"
                 onClick={handleOnAddToCart}
@@ -116,31 +113,28 @@ const Product = props => {
   );
 };
 
-export async function getStaticPaths() {
-  return {
-    // Existing posts are rendered to HTML at build time
-    paths: Object.keys(products)?.map(id => ({
-      params: { id },
-    })),
-    // Enable statically generating additional pages
-    fallback: true,
-  };
-}
+export const getStaticPaths: GetStaticPaths = async () => ({
+  paths: products.map(product => ({
+    params: { id: product.id },
+  })),
+  fallback: true,
+});
 
-export async function getStaticProps({ params }) {
-  try {
-    const props = products?.find(product => product.id === params.id) ?? {};
-
-    return {
-      props,
-      // Next.js will attempt to re-generate the page:
-      // - When a request comes in
-      // - At most once every second
-      revalidate: 1, // In seconds
-    };
-  } catch (error) {
+export const getStaticProps: GetStaticProps<Product> = async ({ params }) => {
+  const id = params?.id;
+  if (typeof id !== 'string') {
     return { notFound: true };
   }
-}
+
+  const props = products.find(product => product.id === id);
+  if (!props) {
+    return { notFound: true };
+  }
+
+  return {
+    props,
+    revalidate: 1,
+  };
+};
 
 export default Product;

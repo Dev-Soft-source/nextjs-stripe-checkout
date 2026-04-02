@@ -1,7 +1,13 @@
 import { StarIcon as EmptyStarIcon } from '@heroicons/react/outline';
 import { StarIcon } from '@heroicons/react/solid';
 
-const Rating = ({ rate = 0, count = 0, max = 5 }) => {
+type RatingProps = {
+  rate?: number;
+  count?: number;
+  max?: number;
+};
+
+const Rating = ({ rate = 0, count = 0, max = 5 }: RatingProps) => {
   const roundedRate = Math.round(rate);
 
   return (

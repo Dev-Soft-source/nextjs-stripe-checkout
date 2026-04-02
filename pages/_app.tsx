@@ -1,10 +1,11 @@
 import 'tailwindcss/tailwind.css';
 import Head from 'next/head';
+import type { AppProps } from 'next/app';
 import { CartProvider } from '@/hooks/use-shopping-cart';
 import { Header, Footer } from '@/components/index';
 import { Toaster } from 'react-hot-toast';
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>

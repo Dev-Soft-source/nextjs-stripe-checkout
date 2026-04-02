@@ -10,14 +10,14 @@ export const formatCurrency = (amount = 0, currency = 'USD') =>
 
 export const isClient = typeof window === 'object';
 
-export const fetcher = url => axios.get(url).then(res => res.data);
+export const fetcher = (url: string) => axios.get(url).then(res => res.data);
 
 export const shootFireworks = () => {
   const duration = 15 * 1000;
   const animationEnd = Date.now() + duration;
   const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
 
-  function randomInRange(min, max) {
+  function randomInRange(min: number, max: number) {
     return Math.random() * (max - min) + min;
   }
 
@@ -29,7 +29,6 @@ export const shootFireworks = () => {
     }
 
     const particleCount = 50 * (timeLeft / duration);
-    // since particles fall down, start a bit higher than random
     confetti(
       Object.assign({}, defaults, {
         particleCount,

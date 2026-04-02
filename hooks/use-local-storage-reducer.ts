@@ -1,15 +1,25 @@
-import { useEffect, useReducer, useRef } from 'react';
+import {
+  useEffect,
+  useReducer,
+  useRef,
+  type Dispatch,
+  type Reducer,
+} from 'react';
 import { isClient } from '@/lib/utils';
 
-const useLocalStorageReducer = (key = '', reducer, initialValue = null) => {
+function useLocalStorageReducer<S, A>(
+  key: string,
+  reducer: Reducer<S, A>,
+  initialValue: S
+): [S, Dispatch<A>] {
   const [state, dispatch] = useReducer(reducer, initialValue, () => {
     try {
       if (isClient) {
         const item = window.localStorage.getItem(key);
-        return item ? JSON.parse(item) : initialValue;
+        return item ? (JSON.parse(item) as S) : initialValue;
       }
       return initialValue;
-    } catch (error) {
+    } catch {
       return initialValue;
     }
   });
@@ -22,15 +32,14 @@ const useLocalStorageReducer = (key = '', reducer, initialValue = null) => {
       return;
     }
 
-    // Update local storage with new state
     try {
       window.localStorage.setItem(key, JSON.stringify(state));
-    } catch (error) {
+    } catch {
       console.error(`Unable to store new value for ${key} in localStorage.`);
     }
-  }, [state]);
+  }, [key, state]);
 
   return [state, dispatch];
-};
+}
 
 export default useLocalStorageReducer;

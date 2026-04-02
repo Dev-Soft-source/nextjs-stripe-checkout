@@ -19,19 +19,24 @@ const Cart = () => {
   const [redirecting, setRedirecting] = useState(false);
 
   const redirectToCheckout = async () => {
-    // Create Stripe checkout
-    const {
-      data: { id },
-    } = await axios.post('/api/checkout_sessions', {
-      items: Object.entries(cartDetails).map(([_, { id, quantity }]) => ({
-        price: id,
-        quantity,
-      })),
-    });
+    setRedirecting(true);
+    try {
+      const {
+        data: { id },
+      } = await axios.post<{ id: string }>('/api/checkout_sessions', {
+        items: Object.entries(cartDetails).map(([, { id, quantity }]) => ({
+          price: id,
+          quantity,
+        })),
+      });
 
-    // Redirect to checkout
-    const stripe = await getStripe();
-    await stripe.redirectToCheckout({ sessionId: id });
+      const stripe = await getStripe();
+      if (stripe) {
+        await stripe.redirectToCheckout({ sessionId: id });
+      }
+    } finally {
+      setRedirecting(false);
+    }
   };
 
   return (
@@ -74,27 +79,24 @@ const Cart = () => {
                 key={key}
                 className="flex justify-between space-x-4 hover:shadow-lg hover:border-opacity-50 border border-opacity-0 rounded-md p-4"
               >
-                {/* Image + Name */}
                 <Link
                   href={`/products/${product.id}`}
                   className="flex items-center space-x-4 group"
                 >
-                    <div className="relative w-20 h-20 group-hover:scale-110 transition-transform">
-                      <Image
-                        src={product.image}
-                        alt={product.name}
-                        layout="fill"
-                        objectFit="contain"
-                      />
-                    </div>
-                    <p className="font-semibold text-xl group-hover:underline">
-                      {product.name}
-                    </p>
+                  <div className="relative w-20 h-20 group-hover:scale-110 transition-transform">
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      layout="fill"
+                      objectFit="contain"
+                    />
+                  </div>
+                  <p className="font-semibold text-xl group-hover:underline">
+                    {product.name}
+                  </p>
                 </Link>
 
-                {/* Price + Actions */}
                 <div className="flex items-center">
-                  {/* Quantity */}
                   <div className="flex items-center space-x-3">
                     <button
                       onClick={() => removeItem(product)}
@@ -112,13 +114,11 @@ const Cart = () => {
                     </button>
                   </div>
 
-                  {/* Price */}
                   <p className="font-semibold text-xl ml-16">
                     <XIcon className="w-4 h-4 text-gray-500 inline-block" />
                     {formatCurrency(product.price)}
                   </p>
 
-                  {/* Remove item */}
                   <button
                     onClick={() => removeItem(product, product.quantity)}
                     className="ml-4 hover:text-rose-500"
