@@ -1,0 +1,9 @@
+{
+  "back-to-home": "Volver al inicio",
+  "counter_one": "uno seleccionado",
+  "counter_other": "{{count}} seleccionados",
+  "counter_zero": "ninguno seleccionado",
+  "h1": "Una página cliente para demostrar i18n en el cliente",
+  "title": "Página cliente",
+  "to-second-client-page": "a la segunda página cliente"
+}

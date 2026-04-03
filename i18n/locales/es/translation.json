@@ -1,0 +1,11 @@
+{
+  "h1": "Un ejemplo sencillo",
+  "title": "Inicio",
+  "to-client-page": "Ir a la página cliente",
+  "to-second-page": "Ir a la segunda página",
+  "welcome": "Bienvenido a Next.js 13/14/15 <1>con el nuevo directorio app</1> e i18next",
+  "blog": {
+    "text": "Consulta la <1>entrada del blog</1> que describe este ejemplo.",
+    "link": "https://locize.com/blog/next-app-dir-i18n/"
+  }
+}

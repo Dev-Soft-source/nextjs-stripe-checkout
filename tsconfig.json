@@ -15,7 +15,8 @@
     "incremental": true,
     "plugins": [{ "name": "next" }],
     "paths": {
-      "@/components/*": ["./components/*"],
+      "@/components/*": ["./[lng]/components/*"],
+      "@/pages/*": ["./[lng]/pages/*"],
       "@/hooks/*": ["./hooks/*"],
       "@/lib/*": ["./lib/*"],
       "products": ["./products.ts"]
