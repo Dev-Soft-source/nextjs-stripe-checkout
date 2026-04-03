@@ -1,11 +1,51 @@
 {
-  "h1": "Un ejemplo sencillo",
-  "title": "Inicio",
-  "to-client-page": "Ir a la página cliente",
-  "to-second-page": "Ir a la segunda página",
-  "welcome": "Bienvenido a Next.js 13/14/15 <1>con el nuevo directorio app</1> e i18next",
-  "blog": {
-    "text": "Consulta la <1>entrada del blog</1> que describe este ejemplo.",
-    "link": "https://locize.com/blog/next-app-dir-i18n/"
+  "meta": {
+    "defaultTitle": "Tienda e-commerce con Next.js y Stripe checkout | AlterClass",
+    "defaultDescription": "Tienda e-commerce con Next.js y Stripe checkout por AlterClass.io",
+    "cartTitle": "Mi carrito | AlterClass",
+    "successTitle": "Pedido confirmado | AlterClass"
+  },
+  "nav": {
+    "language": "Idioma"
+  },
+  "footer": {
+    "madeWith": "Hecho con",
+    "byLine": "por AlterClass.io"
+  },
+  "productCard": {
+    "price": "Precio",
+    "addToCart": "Añadir al carrito",
+    "adding": "Añadiendo...",
+    "addingOne": "Añadiendo 1 artículo...",
+    "added": "{{name}} añadido"
+  },
+  "product": {
+    "loading": "Cargando...",
+    "availability": "Disponibilidad:",
+    "inStock": "En stock",
+    "price": "Precio:",
+    "quantity": "Cantidad:",
+    "addToCart": "Añadir al carrito ({{qty}})",
+    "addingToast": "Añadiendo {{count}} artículo...",
+    "addingToast_plural": "Añadiendo {{count}} artículos...",
+    "addedToast": "{{qty}} × {{name}} añadido(s)"
+  },
+  "cart": {
+    "heading": "Tu carrito",
+    "itemsCount": "{{count}} artículo",
+    "itemsCount_plural": "{{count}} artículos",
+    "clearAll": "Vaciar todo",
+    "emptyHeading": "Tu carrito está vacío.",
+    "emptyCta": "Mira nuestras plantas",
+    "emptyLink": "¡aquí!",
+    "total": "Total:",
+    "redirecting": "Redirigiendo...",
+    "checkout": "Ir al pago"
+  },
+  "success": {
+    "error": "Lo sentimos, ¡algo salió mal!",
+    "loading": "Cargando...",
+    "thanks": "¡Gracias por tu pedido!",
+    "receipt": "Revisa tu correo para el recibo."
   }
 }

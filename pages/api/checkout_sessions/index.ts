@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
 import products from 'products';
 import type { Product } from 'products';
+import { fallbackLng, isLocale } from '@/i18n/settings';
 
 const stripeSecret = process.env.STRIPE_SECRET_KEY;
 if (!stripeSecret) {
@@ -31,6 +32,11 @@ const getBaseUrl = (req: NextApiRequest) => {
 };
 
 type CheckoutBodyItem = { price?: string; quantity?: number };
+
+type CheckoutBody = {
+  items?: CheckoutBodyItem[];
+  locale?: string;
+};
 
 const createLineItems = (items: CheckoutBodyItem[] | undefined) => {
   const productsById = new Map<string, Product>(
@@ -69,8 +75,11 @@ export default async function handler(
   if (req.method === 'POST') {
     try {
       const baseUrl = getBaseUrl(req);
-      const body = req.body as { items?: CheckoutBodyItem[] } | undefined;
+      const body = req.body as CheckoutBody | undefined;
       const lineItems = createLineItems(body?.items);
+
+      const locale =
+        body?.locale && isLocale(body.locale) ? body.locale : fallbackLng;
 
       if (!lineItems.length) {
         return res.status(400).json({
@@ -83,8 +92,8 @@ export default async function handler(
         mode: 'payment',
         payment_method_types: ['card'],
         line_items: lineItems,
-        success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${baseUrl}/cart`,
+        success_url: `${baseUrl}/${locale}/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${baseUrl}/${locale}/cart`,
       });
 
       res.status(200).json(session);

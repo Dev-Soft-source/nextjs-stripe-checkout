@@ -3,7 +3,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { toast } from 'react-hot-toast';
 import { useShoppingCart } from '@/hooks/use-shopping-cart';
+import { useLocale } from '@/hooks/use-locale';
 import { formatCurrency } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 import Rating from './Rating';
 import type { Product } from 'products';
 
@@ -14,6 +16,8 @@ type ProductCardProps = Product & {
 };
 
 const ProductCard = (props: ProductCardProps) => {
+  const { t } = useTranslation();
+  const { prefix } = useLocale();
   const { cartCount, addItem } = useShoppingCart();
   const [adding, setAdding] = useState(false);
 
@@ -24,7 +28,7 @@ const ProductCard = (props: ProductCardProps) => {
     event.preventDefault();
 
     setAdding(true);
-    toastId.current = toast.loading('Adding 1 item...');
+    toastId.current = toast.loading(t('productCard.addingOne'));
 
     props.onClickAdd?.();
 
@@ -39,7 +43,7 @@ const ProductCard = (props: ProductCardProps) => {
 
     if (adding) {
       setAdding(false);
-      toast.success(`${props.name} added`, {
+      toast.success(t('productCard.added', { name: props.name }), {
         id: toastId.current,
       });
     }
@@ -49,15 +53,16 @@ const ProductCard = (props: ProductCardProps) => {
 
   return (
     <Link
-      href={`/products/${props.id}`}
+      href={`${prefix}/products/${props.id}`}
       className="border rounded-md p-6 group"
     >
       <div className="relative w-full h-64 group-hover:transform group-hover:scale-125 group-hover:ease-in-out group-hover:duration-500">
         <Image
           src={props.image}
           alt={props.name}
-          layout="fill"
-          objectFit="contain"
+          fill
+          className="object-contain"
+          sizes="(max-width: 1280px) 50vw, 320px"
         />
       </div>
 
@@ -68,7 +73,7 @@ const ProductCard = (props: ProductCardProps) => {
 
       <div className="mt-4 flex items-center justify-between space-x-2">
         <div>
-          <p className="text-gray-500">Price</p>
+          <p className="text-gray-500">{t('productCard.price')}</p>
           <p className="text-lg font-semibold">
             {formatCurrency(props.price, props.currency)}
           </p>
@@ -84,7 +89,7 @@ const ProductCard = (props: ProductCardProps) => {
               : 'disabled:hover:bg-transparent disabled:hover:text-current disabled:hover:border-gray-200'
           }`}
         >
-          {adding ? 'Adding...' : 'Add to cart'}
+          {adding ? t('productCard.adding') : t('productCard.addToCart')}
         </button>
       </div>
     </Link>

@@ -2,7 +2,9 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Head from 'next/head';
+import { useTranslation } from 'react-i18next';
 import { useShoppingCart } from '@/hooks/use-shopping-cart';
+import { useLocale } from '@/hooks/use-locale';
 import axios from 'axios';
 import { formatCurrency } from '@/lib/utils';
 import getStripe from '@/lib/get-stripe';
@@ -14,6 +16,8 @@ import {
 } from '@heroicons/react/outline';
 
 const Cart = () => {
+  const { t } = useTranslation();
+  const { prefix, lng } = useLocale();
   const { cartDetails, totalPrice, cartCount, addItem, removeItem, clearCart } =
     useShoppingCart();
   const [redirecting, setRedirecting] = useState(false);
@@ -28,6 +32,7 @@ const Cart = () => {
           price: id,
           quantity,
         })),
+        locale: lng,
       });
 
       const stripe = await getStripe();
@@ -42,31 +47,31 @@ const Cart = () => {
   return (
     <>
       <Head>
-        <title>My Shopping Cart | AlterClass</title>
+        <title>{t('meta.cartTitle')}</title>
       </Head>
       <div className="container xl:max-w-screen-xl mx-auto py-12 px-6">
         {cartCount > 0 ? (
           <>
-            <h2 className="text-4xl font-semibold">Your shopping cart</h2>
+            <h2 className="text-4xl font-semibold">{t('cart.heading')}</h2>
             <p className="mt-1 text-xl">
-              {cartCount} items{' '}
+              {t('cart.itemsCount', { count: cartCount })}{' '}
               <button
                 onClick={clearCart}
                 className="opacity-50 hover:opacity-100 text-base capitalize"
               >
-                (Clear all)
+                ({t('cart.clearAll')})
               </button>
             </p>
           </>
         ) : (
           <>
             <h2 className="text-4xl font-semibold">
-              Your shopping cart is empty.
+              {t('cart.emptyHeading')}
             </h2>
             <p className="mt-1 text-xl">
-              Check out our awesome plants{' '}
-              <Link href="/" className="text-red-500 underline">
-                here!
+              {t('cart.emptyCta')}{' '}
+              <Link href={prefix} className="text-red-500 underline">
+                {t('cart.emptyLink')}
               </Link>
             </p>
           </>
@@ -80,15 +85,16 @@ const Cart = () => {
                 className="flex justify-between space-x-4 hover:shadow-lg hover:border-opacity-50 border border-opacity-0 rounded-md p-4"
               >
                 <Link
-                  href={`/products/${product.id}`}
+                  href={`${prefix}/products/${product.id}`}
                   className="flex items-center space-x-4 group"
                 >
                   <div className="relative w-20 h-20 group-hover:scale-110 transition-transform">
                     <Image
                       src={product.image}
                       alt={product.name}
-                      layout="fill"
-                      objectFit="contain"
+                      fill
+                      className="object-contain"
+                      sizes="80px"
                     />
                   </div>
                   <p className="font-semibold text-xl group-hover:underline">
@@ -131,7 +137,7 @@ const Cart = () => {
 
             <div className="flex flex-col items-end border-t py-4 mt-8">
               <p className="text-xl">
-                Total:{' '}
+                {t('cart.total')}{' '}
                 <span className="font-semibold">
                   {formatCurrency(totalPrice)}
                 </span>
@@ -142,7 +148,7 @@ const Cart = () => {
                 disabled={redirecting}
                 className="border rounded py-2 px-6 bg-rose-500 hover:bg-rose-600 border-rose-500 hover:border-rose-600 focus:ring-4 focus:ring-opacity-50 focus:ring-rose-500 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-rose-500 max-w-max mt-4"
               >
-                {redirecting ? 'Redirecting...' : 'Go to Checkout'}
+                {redirecting ? t('cart.redirecting') : t('cart.checkout')}
               </button>
             </div>
           </div>

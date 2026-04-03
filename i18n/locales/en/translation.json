@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "defaultTitle": "E-commerce store built with Next.js and Stripe checkout | AlterClass",
+    "defaultDescription": "E-commerce store built with Next.js and Stripe checkout by AlterClass.io",
+    "cartTitle": "My Shopping Cart | AlterClass",
+    "successTitle": "Order confirmed | AlterClass"
+  },
+  "nav": {
+    "language": "Language"
+  },
+  "footer": {
+    "madeWith": "Made with",
+    "byLine": "by AlterClass.io"
+  },
+  "productCard": {
+    "price": "Price",
+    "addToCart": "Add to cart",
+    "adding": "Adding...",
+    "addingOne": "Adding 1 item...",
+    "added": "{{name}} added"
+  },
+  "product": {
+    "loading": "Loading...",
+    "availability": "Availability:",
+    "inStock": "In stock",
+    "price": "Price:",
+    "quantity": "Quantity:",
+    "addToCart": "Add to cart ({{qty}})",
+    "addingToast": "Adding {{count}} item...",
+    "addingToast_plural": "Adding {{count}} items...",
+    "addedToast": "{{qty}} {{name}} added"
+  },
+  "cart": {
+    "heading": "Your shopping cart",
+    "itemsCount": "{{count}} item",
+    "itemsCount_plural": "{{count}} items",
+    "clearAll": "Clear all",
+    "emptyHeading": "Your shopping cart is empty.",
+    "emptyCta": "Check out our awesome plants",
+    "emptyLink": "here!",
+    "total": "Total:",
+    "redirecting": "Redirecting...",
+    "checkout": "Go to Checkout"
+  },
+  "success": {
+    "error": "Sorry, something went wrong!",
+    "loading": "Loading...",
+    "thanks": "Thanks for your order!",
+    "receipt": "Check your inbox for the receipt."
+  }
+}

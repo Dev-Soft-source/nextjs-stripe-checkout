@@ -1,16 +1,30 @@
 import { NextResponse } from 'next/server'
 import acceptLanguage from 'accept-language'
-import { fallbackLng, languages, cookieName, headerName } from './i18n/settings'
+import {
+  fallbackLng,
+  languages,
+  supportedLanguageList,
+  cookieName,
+  headerName,
+} from './i18n/settings'
 
-acceptLanguage.languages(languages)
+acceptLanguage.languages(supportedLanguageList)
 
 export const config = {
   // matcher: '/:lng*'
   matcher: ['/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js|site.webmanifest).*)']
 }
 
-export function middleware(req) {
-  if (req.nextUrl.pathname.indexOf('icon') > -1 || req.nextUrl.pathname.indexOf('chrome') > -1) return NextResponse.next()
+function isPublicStaticPath(pathname) {
+  if (pathname.startsWith('/plants/')) return true
+  if (pathname === '/leaf.svg' || pathname === '/favicon.ico') return true
+  return /\.(svg|png|jpe?g|gif|webp|ico|woff2?|ttf|eot)$/i.test(pathname)
+}
+
+export function proxy(req) {
+  const pathname = req.nextUrl.pathname
+  if (pathname.indexOf('icon') > -1 || pathname.indexOf('chrome') > -1) return NextResponse.next()
+  if (isPublicStaticPath(pathname)) return NextResponse.next()
   let lng
   if (req.cookies.has(cookieName)) lng = acceptLanguage.get(req.cookies.get(cookieName).value)
   if (!lng) lng = acceptLanguage.get(req.headers.get('Accept-Language'))
